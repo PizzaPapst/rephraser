@@ -1,45 +1,35 @@
-# flyctl launch added from .gitignore
-**\HELP.md
-**\target
-!**\.mvn\wrapper\maven-wrapper.jar
-!**\**\src\main\**\target
-!**\**\src\test\**\target
+# Maven build output
+target/
 
-### STS ###
-**\.apt_generated
-**\.classpath
-**\.factorypath
-**\.project
-**\.settings
-**\.springBeans
-**\.sts4-cache
+# Maven wrapper JAR (nicht ignorieren)
+!.mvn/wrapper/maven-wrapper.jar
 
-### IntelliJ IDEA ###
-**\.idea
-**\*.iws
-**\*.iml
-**\*.ipr
+# Build folders in source (falls vorhanden)
+src/main/**/target/
+src/test/**/target/
+src/main/**/build/
+src/test/**/build/
 
-### NetBeans ###
-nbproject\private
-nbbuild
-dist
-nbdist
-.nb-gradle
-**\build
-!**\**\src\main\**\build
-!**\**\src\test\**\build
+# IDEs
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
 
-### VS Code ###
-**\.vscode
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 
-# flyctl launch added from .idea\.gitignore
-# Default ignored files
-.idea\shelf
-.idea\workspace.xml
-# Editor-based HTTP Client requests
-.idea\httpRequests
-# Datasource local storage ignored files
-.idea\dataSources
-.idea\dataSources.local.xml
+# Render-specific
 fly.toml
