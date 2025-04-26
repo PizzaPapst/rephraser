@@ -53,31 +53,42 @@ public class Controller {
     }*/
 
     @GetMapping("/rephrase")
-    public ResponseEntity<?> rephrase(@RequestParam String text, Integer stil){
-        String stilBeschreibung = switch (stil) {
-            case 1 -> "in einem formellen und professionellen Ton";
-            case 2 -> "kurz und prägnant. Kürze den Text auf etwa 50% der Originallänge.";
-            case 3 -> "freundlich und höflich";
-            case 4 -> "locker und umgangssprachlich";
-            case 5 -> "verkaufsorientiert, überzeugend und aktivierend";
-            case 6 -> "erklärend und leicht verständlich, so als würdest du es einem Laien erklären";
-            default -> "neutral umformuliert";
+    public ResponseEntity<?> rephrase(@RequestParam String text, Integer stil, Integer laenge){
+        /*String stilBeschreibung = switch (stil) {
+            case 1 -> "freundlich und höflich";
+            case 2 -> "locker";
+            case 3 -> "bestimmt und direkt";
+            case 4 -> "formell";
+            default -> "neutral";
         };
 
-        String prompt = String.format("""
-        Formuliere den folgenden Text um %s.
-        Ändere dabei nur den Stil, aber behalte die Bedeutung bei. Füge keine neuen Informationen hinzu.
-        Vermeide einleitende Floskeln wie "Hier ist dein Text" – gib nur die überarbeitete Version zurück.
-    
-        Text:
-        %s
-        """, stilBeschreibung, text);
-
-
-        String geminiAntwort = googleAPI.frageGemini(prompt);
-
+        String laengeBeschreibung = switch (stil) {
+            case 1 -> "Ungefähr so lang wie der Inputtext sein.";
+            case 2 -> "Etwas kürzer als der Inputtext sein.";
+            case 3 -> "Etwas länger als der Inputtext sein.";
+            case 4 -> "In Stichpunkten aufgeführt werden.";
+            default -> "Ungefähr so lang wie der Inputtext sein.";
+        };*/
+        // Count words of Text
+        int wordCount = text.trim().split("\\s+").length;
+        // Create Hashmap
         Map<String, String> response = new HashMap<>();
-        response.put("antwort", geminiAntwort);
+
+        //Check if marked Text ist to short
+        if (wordCount < 10){
+            response.put("antwort", "Text ist zu kurz! Bitte markiere mindestens 10 Wörter.");
+        } else {
+            String prompt = String.format("""
+            %s
+            
+            Kannst du mir das umschreiben, sodass es besser klingt? Bitte Verzichte auch Erklärungen oder einleitende Sätze, sodass ich den Text direkt kopieren kann.
+            """, text);
+
+            String geminiAntwort = googleAPI.frageGemini(prompt);
+
+            response.put("antwort", geminiAntwort);
+        }
+
         return ResponseEntity.ok(response);
     }
 
