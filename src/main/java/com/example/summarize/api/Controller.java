@@ -53,22 +53,7 @@ public class Controller {
     }*/
 
     @GetMapping("/rephrase")
-    public ResponseEntity<?> rephrase(@RequestParam String text, Integer stil, Integer laenge){
-        /*String stilBeschreibung = switch (stil) {
-            case 1 -> "freundlich und höflich";
-            case 2 -> "locker";
-            case 3 -> "bestimmt und direkt";
-            case 4 -> "formell";
-            default -> "neutral";
-        };
-
-        String laengeBeschreibung = switch (stil) {
-            case 1 -> "Ungefähr so lang wie der Inputtext sein.";
-            case 2 -> "Etwas kürzer als der Inputtext sein.";
-            case 3 -> "Etwas länger als der Inputtext sein.";
-            case 4 -> "In Stichpunkten aufgeführt werden.";
-            default -> "Ungefähr so lang wie der Inputtext sein.";
-        };*/
+    public ResponseEntity<?> rephrase(@RequestParam String text){
         // Count words of Text
         int wordCount = text.trim().split("\\s+").length;
         // Create Hashmap
@@ -88,6 +73,29 @@ public class Controller {
 
             response.put("antwort", geminiAntwort);
         }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/correct")
+    public ResponseEntity<?> correct(@RequestParam String text){
+        // Create Hashmap
+        Map<String, String> response = new HashMap<>();
+
+        String prompt = String.format("""
+            %s
+            Ich brauche deine Hilfe bei der Rechtschreibkorrektur.
+            Kannst du mir den Text so zum kopieren geben, dass er nach der deutschen Rechtschreibung, Grammatik und Zeichensetzung korrekt ist?
+            
+            Bitte Verzichte auch Erklärungen oder einleitende Sätze, sodass ich den Text direkt kopieren kann. 
+            Hier ein Beispiel ich welchem Format ich die Antwort gerne hätte. Input: "Das ist ein ganz einfach satz mit einigen fehlern". Dein Output: "Das ist ein ganz einfacher Satz mit einigen Fehlern."
+            
+            Input: 
+            """, text);
+
+        String geminiAntwort = googleAPI.frageGemini(prompt);
+
+        response.put("antwort", geminiAntwort);
 
         return ResponseEntity.ok(response);
     }
